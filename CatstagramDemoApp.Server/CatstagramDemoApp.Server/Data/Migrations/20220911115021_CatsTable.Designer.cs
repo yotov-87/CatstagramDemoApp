@@ -4,6 +4,7 @@ using CatstagramDemoApp.Server.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CatstagramDemoApp.Server.Data.Migrations
 {
     [DbContext(typeof(CatstagramDemoAppDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220911115021_CatsTable")]
+    partial class CatsTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -47,7 +49,7 @@ namespace CatstagramDemoApp.Server.Data.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Cats");
+                    b.ToTable("Cat");
                 });
 
             modelBuilder.Entity("CatstagramDemoApp.Server.Data.Models.User", b =>
