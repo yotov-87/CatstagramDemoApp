@@ -20,6 +20,7 @@ builder.Services
     .AddIdentity()
     .AddJwtAuthentication(appSettings)
     .AddApplicationServices()
+    .AddSwagger()
     .AddControllers();
 
 builder.Services.
@@ -38,6 +39,11 @@ if (app.Environment.IsDevelopment()) {
 //}
 
 app.UseHttpsRedirection()
+    .UseSwagger()
+    .UseSwaggerUI( options => {
+        options.SwaggerEndpoint("swagger/v1/swagger.json", "My Catstagram API v1");
+        options.RoutePrefix = string.Empty;
+    })
     .UseRouting()
     .UseCors(x => x
                 .AllowAnyOrigin()

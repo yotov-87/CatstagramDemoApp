@@ -28,6 +28,7 @@ namespace CatstagramDemoApp.Server.Features.Identity
         }
 
         [Route(nameof(Register))]
+        [HttpPost]
         public async Task<ActionResult> Register(RegisterRequestModel model)
         {
             var user = new User
@@ -46,6 +47,7 @@ namespace CatstagramDemoApp.Server.Features.Identity
         }
 
         [Route(nameof(Login))]
+        [HttpPost]
         public async Task<ActionResult<object>> Login(LoginRequestModel model)
         {
             var user = await userManager.FindByNameAsync(model.UserName);
