@@ -27,8 +27,16 @@ namespace CatstagramDemoApp.Server.Features.Identity
             this.appSettings = appSettings.Value;
         }
 
+
+        /// <summary>
+        /// Register user endpoint
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
         [Route(nameof(Register))]
         [HttpPost]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult> Register(RegisterRequestModel model)
         {
             var user = new User
@@ -46,8 +54,15 @@ namespace CatstagramDemoApp.Server.Features.Identity
             return BadRequest(result.Errors);
         }
 
+        /// <summary>
+        /// Login user endpoint
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
         [Route(nameof(Login))]
         [HttpPost]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult<object>> Login(LoginRequestModel model)
         {
             var user = await userManager.FindByNameAsync(model.UserName);
