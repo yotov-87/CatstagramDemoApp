@@ -1,7 +1,9 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace CatstagramDemoApp.Server.Models.Identity {
-    public class LoginRequestModel {
+namespace CatstagramDemoApp.Server.Features.Identity
+{
+    public class LoginRequestModel
+    {
         [Required]
         public string UserName { get; set; }
 
