@@ -7,9 +7,26 @@ using System.Text;
 using System.Runtime.CompilerServices;
 using CatstagramDemoApp.Server.Features.Identity;
 using CatstagramDemoApp.Server.Features.Cats;
+using Microsoft.EntityFrameworkCore;
 
 namespace CatstagramDemoApp.Server.Infrastructure {
     public static class ServiceCollectionExtensions {
+
+        public static AppSettings GetApplicationSettings(this IServiceCollection services, IConfiguration configuration) {
+            var applicationSettingsConfiguration = configuration.GetSection("ApplicationSettingsSection");
+            services.
+                Configure<AppSettings>(applicationSettingsConfiguration);
+            var appSettings = applicationSettingsConfiguration.Get<AppSettings>();
+
+            return appSettings;
+        }
+
+        public static IServiceCollection AddDatabase(this IServiceCollection services, IConfiguration configuration) {
+            services.AddDbContext<CatstagramDemoAppDbContext>(options =>
+                options.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
+
+            return services;
+        }
 
         public static IServiceCollection AddIdentity(this IServiceCollection services) {
             services

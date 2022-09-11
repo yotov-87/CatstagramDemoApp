@@ -12,14 +12,11 @@ using System.Text;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 
 var appSettings = builder.Services.GetApplicationSettings(builder.Configuration);
 
 builder.Services
-    .AddDbContext<CatstagramDemoAppDbContext>(options =>
-        options
-            .UseSqlServer(connectionString))
+    .AddDatabase(builder.Configuration)
     .AddIdentity()
     .AddJwtAuthentication(appSettings)
     .AddApplicationServices()
