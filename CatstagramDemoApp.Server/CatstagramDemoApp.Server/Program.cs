@@ -14,46 +14,19 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 
-builder.Services.
-    AddDbContext<CatstagramDemoAppDbContext>(options =>
-        options.UseSqlServer(connectionString));
+var appSettings = builder.Services.GetApplicationSettings(builder.Configuration);
+
+builder.Services
+    .AddDbContext<CatstagramDemoAppDbContext>(options =>
+        options
+            .UseSqlServer(connectionString))
+    .AddIdentity()
+    .AddJwtAuthentication(appSettings)
+    .AddApplicationServices()
+    .AddControllers();
 
 builder.Services.
     AddDatabaseDeveloperPageExceptionFilter();
-builder.Services
-    .AddIdentity<User, IdentityRole>(options => {
-        options.Password.RequiredLength = 3;
-        options.Password.RequireDigit = false;
-        options.Password.RequireNonAlphanumeric = false;
-        options.Password.RequireUppercase = false;
-        options.Password.RequireLowercase = false;
-    })
-    .AddEntityFrameworkStores<CatstagramDemoAppDbContext>();
-
-var applicationSettingsConfiguration = builder.Configuration.GetSection("ApplicationSettingsSection");
-builder.Services.
-    Configure<AppSettings>(applicationSettingsConfiguration);
-
-var appSettings = applicationSettingsConfiguration.Get<AppSettings>();
-var key = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(appSettings.Secret));
-
-builder.Services
-    .AddAuthentication(x => {
-    x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-    x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-    })
-    .AddJwtBearer(x => {
-        x.RequireHttpsMetadata = false;
-        x.SaveToken = true;
-        x.TokenValidationParameters = new TokenValidationParameters {
-            ValidateIssuerSigningKey = true,
-            IssuerSigningKey = key,
-            ValidateAudience = false,
-            ValidateIssuer = false // TODO: set to "true" may be
-        };
-    });
-
-builder.Services.AddControllers();
 
 var app = builder.Build();
 
@@ -67,28 +40,17 @@ if (app.Environment.IsDevelopment()) {
 //    app.UseHsts();
 //}
 
-app.UseHttpsRedirection();
-//app.UseStaticFiles();
-
-app.UseRouting();
-
-app.UseCors(x => x
+app.UseHttpsRedirection()
+    .UseRouting()
+    .UseCors(x => x
                 .AllowAnyOrigin()
                 .AllowAnyMethod()
-                .AllowAnyHeader());
-
-app.UseAuthentication();
-app.UseAuthorization();
-
-app.UseEndpoints(endpoints => {
-    endpoints.MapControllers();
-});
-
-//app.MapControllerRoute(
-//    name: "default",
-//    pattern: "{controller=Home}/{action=Index}/{id?}");
-//app.MapRazorPages();
-
-app.ApplyMigration();
+                .AllowAnyHeader())
+    .UseAuthentication()
+    .UseAuthorization()
+    .UseEndpoints(endpoints => {
+        endpoints.MapControllers();
+    })
+    .ApplyMigration();
 
 app.Run();
