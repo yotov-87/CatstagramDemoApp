@@ -7,13 +7,17 @@ import { AppComponent } from './app.component';
 import { LoginComponent } from './login/login.component';
 import { RegisterComponent } from './register/register.component';
 import { AuthService } from './services/auth.service';
+import { CatService } from './services/cat.service';
 import { HttpClientModule } from '@angular/common/http';
+import { CreatepostComponent } from './createpost/createpost.component';
+import { AuthGuardService } from './services/auth-guard.service';
 
 @NgModule({
   declarations: [
     AppComponent,
     LoginComponent,
-    RegisterComponent
+    RegisterComponent,
+    CreatepostComponent
   ],
   imports: [
     BrowserModule,
@@ -21,7 +25,7 @@ import { HttpClientModule } from '@angular/common/http';
     ReactiveFormsModule,
     HttpClientModule
   ],
-  providers: [AuthService],
+  providers: [AuthService, CatService, AuthGuardService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
