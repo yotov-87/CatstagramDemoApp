@@ -17,8 +17,6 @@ export class CatService {
     ) { }
 
   create(data:any): Observable<Cat>{
-    let headers = new HttpHeaders();
-    headers = headers.set('Authorization', `Bearer ${this.authService.getToken()}`)
-    return this.httpClient.post<Cat>(this.catPath, data, {headers})
+    return this.httpClient.post<Cat>(this.catPath, data)
   }
 }
